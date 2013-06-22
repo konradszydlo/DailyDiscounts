@@ -1,0 +1,25 @@
+{
+    "title": "Konrad's Daily Discounts",
+    "discounts": [
+        {
+            "file": "0.html",
+            "title": "Welcome Note"
+        },
+        {
+            "file": "1.html",
+            "title": "Discount Ichi"
+        },
+        {
+            "file": "2.html",
+            "title": "Discount Ni"
+        },
+        {
+            "file": "3.html",
+            "title": "Discount San"
+        },
+        {
+            "file": "4.html",
+            "title": "Discount Yon"
+        }
+    ]
+}
