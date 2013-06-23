@@ -1,28 +1,23 @@
 package com.ryujinkony.dailydiscounts;
 
 import android.os.Bundle;
-import android.util.Log;
 
 public class SimpleContentFragment extends AbstractContentFragment {
-
 	private static final String KEY_FILE = "file";
-	
-	private static final String TAG = "SimpleContentFragment";
 
 	protected static SimpleContentFragment newInstance(String file) {
-		SimpleContentFragment fragment = new SimpleContentFragment();
+		SimpleContentFragment f = new SimpleContentFragment();
 
-		Log.i(TAG, "inside SimpleContentFragment.newInstance");
-		
 		Bundle args = new Bundle();
-		args.putString(KEY_FILE, file);
-		fragment.setArguments(args);
 
-		return fragment;
+		args.putString(KEY_FILE, file);
+		f.setArguments(args);
+
+		return (f);
 	}
 
 	@Override
-	String getDiscountPage() {
-		return getArguments().getString(KEY_FILE);
+	String getPage() {
+		return (getArguments().getString(KEY_FILE));
 	}
 }

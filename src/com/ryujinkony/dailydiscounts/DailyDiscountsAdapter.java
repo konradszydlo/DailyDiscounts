@@ -2,27 +2,27 @@ package com.ryujinkony.dailydiscounts;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
-
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class DailyDiscountsAdapter extends FragmentStatePagerAdapter {
+	private DiscountsModel model = null;
 
-	private DiscountsModel discounts = null;
-	
-	public DailyDiscountsAdapter(SherlockFragmentActivity ctxt, DiscountsModel discounts) {
+	public DailyDiscountsAdapter(SherlockFragmentActivity ctxt, DiscountsModel model) {
 		super(ctxt.getSupportFragmentManager());
-		this.discounts = discounts;
+
+		this.model = model;
 	}
-	
+
 	@Override
 	public Fragment getItem(int position) {
-		String discountFile = discounts.getDailyDiscountFile(position);
-		
-		return (SimpleContentFragment.newInstance("file:///android_asset/discounts/" + discountFile));
+		String path = model.getDailyDiscountFile(position);
+
+				return (SimpleContentFragment.newInstance("file:///android_asset/discounts/"
+				+ path));
 	}
-	
+
 	@Override
 	public int getCount() {
-		return discounts.getDailyDiscountsCount();
+		return (model.getDailyDiscountsCount());
 	}
 }

@@ -7,27 +7,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 abstract public class AbstractContentFragment extends WebViewFragment {
-
-	abstract String getDiscountPage();
+	abstract String getPage();
 
 	@Override
-	public void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 	}
 
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle icicle) {
-		View result = super.onCreateView(inflater, container, icicle);
+			Bundle savedInstanceState) {
+		View result = super.onCreateView(inflater, container,
+				savedInstanceState);
 
 		getWebView().getSettings().setJavaScriptEnabled(true);
 		getWebView().getSettings().setSupportZoom(true);
 		getWebView().getSettings().setBuiltInZoomControls(true);
-		getWebView().loadUrl(getDiscountPage());
+		getWebView().loadUrl(getPage());
 
-		return result;
+		return (result);
 	}
-
 }

@@ -13,22 +13,22 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.json.JSONObject;
 
 public class ModelFragment extends SherlockFragment {
-	private DiscountsModel discountsModel = null;
+	private DiscountsModel model = null;
 	private DiscountsLoadTask discountsLoadTask = null;
 
 	@Override
-	public void onActivityCreated(Bundle icicle) {
-		super.onActivityCreated(icicle);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
 		setRetainInstance(true);
 		deliverModel();
 	}
 
 	synchronized private void deliverModel() {
-		if (discountsModel != null) {
-			((DailyDiscountsActivity) getActivity()).setupPager(discountsModel);
+		if (model != null) {
+			((DailyDiscountsActivity) getActivity()).setupPager(model);
 		} else {
-			if (discountsModel == null && discountsLoadTask == null) {
+			if (model == null && discountsLoadTask == null) {
 				discountsLoadTask = new DiscountsLoadTask();
 				executeAsyncTask(discountsLoadTask, getActivity()
 						.getApplicationContext());
@@ -37,7 +37,8 @@ public class ModelFragment extends SherlockFragment {
 	}
 
 	@TargetApi(11)
-	static <T> void executeAsyncTask(AsyncTask<T, ?, ?> task, T... params) {
+	static public <T> void executeAsyncTask(AsyncTask<T, ?, ?> task,
+			T... params) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
 		} else {
@@ -46,44 +47,45 @@ public class ModelFragment extends SherlockFragment {
 	}
 
 	private class DiscountsLoadTask extends AsyncTask<Context, Void, Void> {
-		DiscountsModel localDiscountsModel = null;
-		Exception e = null;
+		private DiscountsModel localDiscounts = null;
+		private Exception e = null;
 
 		@Override
 		protected Void doInBackground(Context... ctxt) {
 			try {
-				StringBuilder sb = new StringBuilder();
+				StringBuilder buf = new StringBuilder();
 				InputStream json = ctxt[0].getAssets().open(
 						"discounts/contents.json");
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(json));
-
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						json));
 				String str;
 
-				while ((str = reader.readLine()) != null) {
-					sb.append(str);
+				while ((str = in.readLine()) != null) {
+					buf.append(str);
 				}
-				reader.close();
 
-				localDiscountsModel = new DiscountsModel(new JSONObject(
-						sb.toString()));
+				in.close();
+
+				localDiscounts = new DiscountsModel(new JSONObject(
+						buf.toString()));
+
 			} catch (Exception e) {
 				this.e = e;
 			}
-			return null;
+
+			return (null);
 		}
 
 		@Override
 		public void onPostExecute(Void arg0) {
 			if (e == null) {
-				ModelFragment.this.discountsModel = localDiscountsModel;
+				ModelFragment.this.model = localDiscounts;
 				ModelFragment.this.discountsLoadTask = null;
 				deliverModel();
 			} else {
-				Log.e(getClass().getSimpleName(),
-						"Exception Loading Discounts", e);
+				Log.e(getClass().getSimpleName(), "Exception loading contents",
+						e);
 			}
 		}
 	}
-
 }
